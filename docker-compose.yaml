@@ -1,0 +1,23 @@
+version: '2'
+services:
+  app:
+    # Container name (referenced in index.js line 15)
+    container_name: docker-node-mongo
+    # If it fails, restart
+    restart: always
+    # Looks in current directory for docker file
+    build: .
+    # Within the app, we run on port 3000 (index.js line 37). So like other docker containers, that the INTERNAL port.
+    # We are now mapping that port to 80 on our local machine, so this can be accessed at "localhost:80"
+    ports:
+      - '80:3000'
+    # Links our app container to our mongo container
+    links:
+      - mongo
+  mongo:
+    # Container name references in index.js line 15
+    container_name: mongo
+    image: mongo
+    # Ports referenced in index.js line 15.
+    ports:
+      - '27017:27017'

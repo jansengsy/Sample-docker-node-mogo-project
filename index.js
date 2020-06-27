@@ -11,26 +11,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Connect to MongoDB
 mongoose
   .connect(
+    // This should map to the container name (which we set in the docker comose file)
     'mongodb://mongo:27017/docker-node-mongo',
     { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 const Item = require('./models/Item');
 
 app.get('/', (req, res) => {
   Item.find()
-    .then(items => res.render('index', { items }))
-    .catch(err => res.status(404).json({ msg: 'No items found' }));
+    .then((items) => res.render('index', { items }))
+    .catch((err) => res.status(404).json({ msg: 'No items found' }));
 });
 
 app.post('/item/add', (req, res) => {
   const newItem = new Item({
-    name: req.body.name
+    name: req.body.name,
   });
 
-  newItem.save().then(item => res.redirect('/'));
+  newItem.save().then((item) => res.redirect('/'));
 });
 
 const port = 3000;
